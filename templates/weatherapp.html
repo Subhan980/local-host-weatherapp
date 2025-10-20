@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #7abce2ff, #296eceff);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 28px;
+      margin-bottom: 25px;
+      text-shadow: 2px 2px 4px #00000030;
+      letter-spacing: 1px;
+    }
+
+    form {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      padding: 10px;
+      border: none;
+      border-radius: 12px;
+      width: 220px;
+      outline: none;
+      font-size: 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      background: #0066ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background: #0048c8;
+      transform: scale(1.05);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      width: 280px;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.8s ease;
+      margin-bottom: 20px;
+    }
+
+    .city-name {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .temp {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .desc {
+      font-size: 18px;
+      text-transform: capitalize;
+      margin-bottom: 8px;
+    }
+
+    .humidity {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .icon {
+      font-size: 45px;
+      margin-bottom: 5px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    ul {
+      color: white;
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin: 5px 0;
+      font-size: 18px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Weather App</h2>
+
+  <form method="POST">
+    <input type="text" name="city" placeholder="Enter city" required>
+    <button type="submit">Search</button>
+  </form>
+
+  {% if weather %}
+    {% if weather.error %}
+      <p style="color:#ffebee; font-weight:bold;">{{ weather.error }}</p>
+    {% else %}
+      <div class="card">
+        {% set icon = "☀️" %}
+        {% if "rain" in weather.desc.lower() %}
+          {% set icon = "🌧️" %}
+        {% elif "cloud" in weather.desc.lower() %}
+          {% set icon = "☁️" %}
+        {% elif "clear" in weather.desc.lower() %}
+          {% set icon = "☀️" %}
+        {% elif "snow" in weather.desc.lower() %}
+          {% set icon = "❄️" %}
+        {% endif %}
+
+        <div class="icon">{{ icon }}</div>
+        <div class="city-name">{{ weather.city }}</div>
+        <div class="temp">{{ weather.temp }} °C</div>
+        <div class="desc">{{ weather.desc }}</div>
+        <div class="humidity">Humidity: {{ weather.humidity }}%</div>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if cities %}
+    <h3 style="color:white;"> Saved Cities</h3>
+    <ul>
+      {% for c in cities %}
+        <li>{{ c }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+</body>
+</html>
